@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-br">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Triagem RH</title><link rel="stylesheet" href="/static/style.css"></head>
+<body>
+<div id="loginView" class="loginWrap">
+  <form id="loginForm" class="loginCard">
+    <div class="brandMark">RH</div><h1>Triagem RH</h1><p>Plataforma interna de recrutamento e triagem.</p>
+    <label>E-mail<input name="email" type="email" placeholder="admin@example.local" required></label>
+    <label>Senha<input name="senha" type="password" required></label>
+    <button>Entrar</button><small>Use as credenciais configuradas nas variáveis de ambiente.</small>
+  </form>
+</div>
+<div id="appView" class="hidden">
+  <aside class="sidebar">
+    <div class="logo"><span>RH</span><div><b>Triagem</b><small>Recrutamento</small></div></div>
+    <nav>
+      <button class="nav active" data-page="dashboard">Dashboard</button>
+      <button class="nav" data-page="vagas">Vagas</button>
+      <button class="nav" data-page="candidatos">Candidatos</button>
+      <button class="nav" data-page="novo">Novo currículo</button>
+    </nav>
+    <div class="sideBottom"><div id="userName"></div><button id="logoutBtn" class="linkBtn">Sair</button></div>
+  </aside>
+  <main class="content">
+    <header class="topbar"><div><h1 id="pageTitle">Dashboard</h1><p id="pageSub">Visão geral do recrutamento</p></div><a class="btn secondary" href="/api/export.csv">Exportar CSV</a></header>
+
+    <section id="page-dashboard" class="page activePage">
+      <div id="cards" class="cards"></div>
+      <div class="grid2">
+        <div class="panel"><h2>Currículos por origem</h2><div id="originChart" class="bars"></div></div>
+        <div class="panel"><h2>Candidatos por vaga</h2><div id="jobChart" class="bars"></div></div>
+      </div>
+      <div class="panel"><div class="panelHead"><h2>Recebidos recentemente</h2><button class="textButton" onclick="go('candidatos')">Ver todos</button></div><div id="recentes"></div></div>
+    </section>
+
+    <section id="page-vagas" class="page">
+      <div class="split">
+        <form id="vagaForm" class="panel formPanel"><h2>Nova vaga</h2>
+          <div class="formGrid"><label>Título<input name="titulo" required placeholder="Ex.: Vendedor"></label><label>Unidade<input name="unidade" placeholder="Ex.: Tatuapé"></label></div>
+          <div class="formGrid"><label>Área<input name="area" placeholder="Ex.: Varejo"></label><label>Experiência mínima (meses)<input name="experiencia_min_meses" type="number" min="0" value="6"></label></div>
+          <label>Descrição<textarea name="descricao" placeholder="Resumo da vaga"></textarea></label>
+          <label>Requisitos obrigatórios<textarea name="requisitos_obrigatorios" placeholder="vendas, atendimento, metas"></textarea></label>
+          <label>Requisitos desejáveis<textarea name="requisitos_desejaveis" placeholder="varejo, moda, loja física"></textarea></label>
+          <button>Criar vaga</button>
+        </form>
+        <div class="panel"><div class="panelHead"><h2>Vagas cadastradas</h2><span id="vagaCount" class="badge"></span></div><div id="vagasList"></div></div>
+      </div>
+    </section>
+
+    <section id="page-candidatos" class="page">
+      <div class="panel filters"><input id="searchCand" placeholder="Buscar candidato"><select id="filterVaga"><option value="">Todas as vagas</option></select><select id="filterStatus"><option value="">Todos os status</option><option>APTO PARA ANÁLISE</option><option>REVISÃO DO RH</option><option>NÃO ATENDE REQUISITO MÍNIMO</option></select><select id="filterOrigem"><option value="">Todas as origens</option><option>UPLOAD MANUAL</option><option>OUTLOOK</option><option>INFOJOBS</option><option>CATHO</option><option>LINKEDIN</option><option>WHATSAPP</option></select></div>
+      <div class="panel tablePanel"><div class="tableWrap"><table><thead><tr><th>Candidato</th><th>Vaga</th><th>Origem</th><th>Experiência</th><th>Score</th><th>Triagem</th><th>Decisão</th><th></th></tr></thead><tbody id="candBody"></tbody></table></div></div>
+    </section>
+
+    <section id="page-novo" class="page">
+      <div class="uploadLayout"><form id="uploadForm" class="panel uploadCard"><div class="uploadIcon">PDF</div><h2>Adicionar currículo</h2><p>Envie um PDF e associe o candidato a uma vaga.</p><label>Vaga<select name="vaga_id" id="uploadVaga" required></select></label><label>Origem<select name="origem"><option>UPLOAD MANUAL</option><option>OUTLOOK</option><option>INFOJOBS</option><option>CATHO</option><option>LINKEDIN</option><option>WHATSAPP</option></select></label><label class="fileBox">Currículo PDF<input name="arquivo" type="file" accept="application/pdf" required></label><button>Processar currículo</button><div id="uploadResult"></div></form><div class="panel explain"><h2>Como esta versão processa</h2><ol><li>Extrai o texto do PDF localmente.</li><li>Tenta identificar nome, e-mail e telefone.</li><li>Calcula tempo de experiência declarado.</li><li>Compara termos com requisitos da vaga.</li><li>Gera score e encaminha o caso ao RH.</li></ol><p class="notice">A próxima etapa será substituir a extração simples por IA, mantendo o motor de regras e a decisão humana.</p></div></div>
+    </section>
+  </main>
+</div>
+<div id="modal" class="modal hidden"><div class="modalBox"><button class="modalClose" onclick="closeModal()">×</button><div id="modalContent"></div></div></div>
+<script src="/static/app.js"></script>
+</body></html>

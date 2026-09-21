@@ -1,0 +1,5 @@
+triagem_v2.db
+uploads/
+__pycache__/
+*.pyc
+.env
